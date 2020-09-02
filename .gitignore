@@ -1,0 +1,12 @@
+.vscode
+build/
+node_modules
+coverege
+dist
+.env
+ormconfig.json
+
+
+
+temp/*
+!temp/.gitkeep
