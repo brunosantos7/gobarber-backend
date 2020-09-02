@@ -25,9 +25,9 @@ jobs:
       - name: Copy dist to Digital Ocean
         uses: appleboy/scp-action@master
         with:
-          source: "dist"
-          target: "test" 
+          source: "."
+          target: "~/app/gobarber-backend" 
           host: ${{ secrets.SSH_HOST }}
           port: ${{ secrets.SSH_PORT }}
-          user: ${{ secrets.SSH_USER }} 
+          username: ${{ secrets.SSH_USER }} 
           key: ${{ secrets.SSH_KEY }}
