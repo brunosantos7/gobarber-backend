@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v1.4.3
+        with:
+          node_version: 12.x
+      
+      - name: Install depencencies
+        run: npm install
+        
+      - name: Run build
+        run: npm run build
+        
+      - name: Copy dist to Digital Ocean
+        uses: appleboy/scp-action@master
+        with:
+          source: ".,!node_modules"
+          target: "~/app/gobarber-backend" 
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USER }} 
+          key: ${{ secrets.SSH_KEY }}          
+        
+      - name: Install depencencies/run migrations/restart node on Digital Ocean
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USER }} 
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/app/gobarber-backend
+            npm install          
+            ./node_modules/.bin/typeorm migration:run  
+            pm2 restart gobarber-backend
