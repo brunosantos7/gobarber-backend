@@ -35,7 +35,7 @@ class User {
   getAvatar_url(): string | null {
     return this.avatar
       ? `${process.env.APP_API_URL}/files/${this.avatar}`
-      : null;
+      : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png';
   }
 }
 
